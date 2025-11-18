@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Day & Night Sticker Pack — Geist shrifti</title>
+  <meta name="description" content="Dasturchilar uchun Day & Night modelik stickerlar — hammasi Geist shriftida. HTML + CSS + JS (SVG-to-PNG download)." />
+
+  <!-- NOTE: Geist shriftini ishlatish uchun quyidagi @font-face URL'ni o'zingizdagi .woff2 fayliga yoki hostingga yo'naltiring. -->
+  <style>
+    /* Replace the URL below with your Geist font file (woff2/woff). If you don't have Geist, the page will fall back to system fonts. */
+    @font-face {
+      font-family: 'GeistCustom';
+      src: url('./fonts/Geist-Variable.woff2') format('woff2'); /* <-- PUT FONT HERE */
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root{
+      --bg-day: #f6f9ff;
+      --surface-day: #ffffff;
+      --muted-day: #6b7280;
+      --accent-day: #2563eb; /* blue */
+      --glass-day: rgba(37,99,235,0.08);
+
+      --bg-night: #0b1020;
+      --surface-night: #0f1724;
+      --muted-night: #94a3b8;
+      --accent-night: #8b5cf6; /* violet */
+      --glass-night: rgba(139,92,246,0.08);
+
+      --radius: 14px;
+      --shadow: 0 8px 30px rgba(2,6,23,0.08);
+      --shadow-dark: 0 8px 30px rgba(2,6,23,0.6);
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: 'GeistCustom', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg-day);
+      color:#0f1724;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:28px;
+      box-sizing:border-box;
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+    }
+
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:20px;
+    }
+
+    h1{font-size:20px;margin:0;font-weight:700;letter-spacing:-0.02em}
+    p.lead{margin:6px 0 0;color:var(--muted-day);font-size:13px}
+
+    .controls{display:flex;gap:12px;align-items:center}
+
+    .toggle{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:linear-gradient(180deg,#fff,#f3f4f6);box-shadow:var(--shadow);cursor:pointer;border:1px solid rgba(2,6,23,0.04);
+    }
+    .toggle input{display:none}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:18px;
+      margin-top:22px;
+    }
+
+    .sticker{
+      background:var(--surface-day);
+      border-radius:var(--radius);
+      padding:18px;
+      display:flex;flex-direction:column;align-items:center;gap:12px;justify-content:center;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+      box-shadow:var(--shadow);
+      cursor:default;
+      min-height:200px;
+    }
+    .sticker:hover{transform:translateY(-6px)}
+
+    .svgwrap{width:96px;height:96px;display:flex;align-items:center;justify-content:center;border-radius:16px}
+    .label{font-size:14px;font-weight:600;margin:0}
+    .desc{font-size:12px;color:var(--muted-day);margin:0}
+
+    .row{display:flex;gap:8px;align-items:center}
+
+    .btn{
+      padding:8px 12px;border-radius:10px;border:0;background:var(--accent-day);color:white;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(37,99,235,0.18);
+    }
+
+    /* Night theme */
+    body.night{
+      background:var(--bg-night);color:#e6eefb
+    }
+    body.night .sticker{background:var(--surface-night);box-shadow:var(--shadow-dark)}
+    body.night .desc{color:var(--muted-night)}
+    body.night .toggle{background:linear-gradient(180deg,#0f1724,#0b1220);border:1px solid rgba(255,255,255,0.04)}
+    body.night .btn{background:var(--accent-night);box-shadow:0 6px 18px rgba(139,92,246,0.14)}
+
+    /* small screens */
+    @media (max-width:520px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .sticker{min-height:160px;padding:14px}
+    }
+
+    /* download hint */
+    .footer-note{margin-top:18px;color:var(--muted-day);font-size:13px}
+    body.night .footer-note{color:var(--muted-night)}
+
+    /* badge */
+    .badge{font-size:11px;padding:6px 8px;border-radius:999px;background:rgba(2,6,23,0.04);font-weight:700}
+    body.night .badge{background:rgba(255,255,255,0.04)}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Day & Night Sticker Pack — Geist shriftida</h1>
+        <p class="lead">Dasturchilar uchun tayyor stickerlar: Day va Night variantlari. Har bir stickerni PNG sifatida yuklab olish mumkin.</p>
+      </div>
+
+      <div class="controls">
+        <div class="badge">Geist</div>
+        <label class="toggle" title="toggle theme">
+          <input type="checkbox" id="themeToggle" />
+          <span id="toggleLabel">Day</span>
+        </label>
+        <button class="btn" id="downloadAll">Hammasini yuklab olish (zip)</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="grid" id="stickerGrid">
+        <!-- Sticker items injected by JS for convenience -->
+      </div>
+
+      <p class="footer-note">Eslatma: Geist shriftini ishlatish uchun sahifadagi <code>@font-face</code> URL'ni o'zingizning shrift faylingizga yo'naltiring (woff2 tavsiya etiladi). Agar shrift bo'lmasa, tizim shriftlari ishlatiladi.</p>
+    </main>
+  </div>
+
+  <script>
+    // Sticker definitions: id, title, desc, svg (day colors and night colors will be applied via JS)
+    const stickers = [
+      {
+        id: 'sun-code',
+        title: 'Day — Code Sun',
+        desc: 'Morning coding vibes',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(20,20)">
+              <circle cx="28" cy="28" r="12" fill="${fill.main}" />
+              <path d="M10 28 L22 36 L22 20 Z" fill="${fill.accent}" opacity="0.95" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'moon-laptop',
+        title: 'Night — Moon Laptop',
+        desc: 'Late-night debugging',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(14,18)">
+              <circle cx="20" cy="10" r="10" fill="${fill.main}" />
+              <rect x="0" y="28" width="64" height="24" rx="6" fill="${fill.accent}" />
+              <rect x="6" y="34" width="52" height="10" rx="3" fill="${fill.screen}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'coffee',
+        title: 'Coffee',
+        desc: 'Fuel for late sprints',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(20,22)">
+              <rect x="8" y="12" width="28" height="28" rx="6" fill="${fill.main}" />
+              <path d="M36 16 h10 a8 8 0 0 1 0 16 h-10" stroke="${fill.accent}" stroke-width="3" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>`
+      },
+      {
+        id: 'bug-fix',
+        title: 'Bug Fix',
+        desc: 'Squash it!',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(16,18)">
+              <circle cx="24" cy="20" r="10" fill="${fill.main}" />
+              <rect x="10" y="36" width="28" height="6" rx="3" fill="${fill.accent}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'rocket',
+        title: 'Launch',
+        desc: 'Ship it!',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(16,16)">
+              <path d="M24 6 L34 26 L14 26 Z" fill="${fill.main}" />
+              <rect x="18" y="26" width="12" height="20" rx="6" fill="${fill.accent}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'heart',
+        title: 'Love OSS',
+        desc: 'Open-source heart',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(18,18)">
+              <path d="M20 10 C14 6 6 10 6 16 C6 30 26 36 26 36 C26 36 46 30 46 16 C46 10 38 6 32 10 C28 12 26 14 26 14 C26 14 24 12 20 10 Z" fill="${fill.main}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'stars',
+        title: 'Night Sky',
+        desc: 'Dreaming in code',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(14,16)">
+              <circle cx="12" cy="10" r="2" fill="${fill.accent}" />
+              <circle cx="34" cy="18" r="3" fill="${fill.main}" />
+              <circle cx="52" cy="8" r="2" fill="${fill.accent}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'cloud-sync',
+        title: 'Cloud',
+        desc: 'Deploy & Sync',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(16,20)">
+              <path d="M8 22 q6 -12 20 -6 q8 -10 20 -2 q10 6 8 16 q-2 12 -20 12 H12 q-6 0 -4 -14z" fill="${fill.main}" />
+            </g>
+          </svg>`
+      },
+      {
+        id: 'terminal',
+        title: 'Terminal',
+        desc: 'I <3 CLI',
+        icon: (fill) => `
+          <svg width="96" height="96" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+            <rect width="96" height="96" rx="18" fill="${fill.bg}"/>
+            <g transform="translate(18,22)">
+              <rect x="6" y="12" width="36" height="20" rx="4" fill="${fill.main}" />
+              <path d="M12 20 L18 24 L12 28" stroke="${fill.accent}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            </g>
+          </svg>`
+      }
+    ];
+
+    // Colors for day and night themes
+    const palette = {
+      day: {
+        bg: '#fff',
+        main: '#0f1724',
+        accent: '#2563eb',
+        screen: '#e6f0ff'
+      },
+      night: {
+        bg: '#07102a',
+        main: '#e6eefb',
+        accent: '#8b5cf6',
+        screen: '#111827'
+      }
+    };
+
+    const grid = document.getElementById('stickerGrid');
+
+    function render(theme='day'){
+      grid.innerHTML='';
+      const fill = palette[theme];
+      stickers.forEach(s=>{
+        const div = document.createElement('div');
+        div.className='sticker';
+        div.id = s.id;
+
+        const svgWrap = document.createElement('div');
+        svgWrap.className='svgwrap';
+        svgWrap.innerHTML = s.icon({bg: fill.bg, main: fill.main, accent: fill.accent, screen: fill.screen});
+
+        const label = document.createElement('p'); label.className='label'; label.textContent = s.title;
+        const desc = document.createElement('p'); desc.className='desc'; desc.textContent = s.desc;
+
+        const actions = document.createElement('div'); actions.className='row';
+        const dl = document.createElement('button'); dl.className='btn'; dl.textContent='Download';
+        dl.addEventListener('click', ()=> downloadStickerAsPNG(s.id, s.icon({bg: fill.bg, main: fill.main, accent: fill.accent, screen: fill.screen})))
+
+        actions.appendChild(dl);
+
+        div.appendChild(svgWrap);
+        div.appendChild(label);
+        div.appendChild(desc);
+        div.appendChild(actions);
+
+        grid.appendChild(div);
+      })
+    }
+
+    // Convert an SVG string to PNG and trigger download
+    function downloadStickerAsPNG(id, svgString){
+      // Create an image
+      const svgData = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(svgData);
+      const img = new Image();
+      img.onload = function(){
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+
+        // White / transparent background depending on theme
+        if(document.body.classList.contains('night')){
+          ctx.fillStyle = '#0b1220';
+        } else {
+          ctx.fillStyle = '#ffffff';
+        }
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0);
+        canvas.toBlob(function(blob){
+          const a = document.createElement('a');
+          a.download = id + '.png';
+          a.href = URL.createObjectURL(blob);
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      };
+      img.onerror = function(e){
+        alert('SVGni rasmga aylantirishda xatolik.');
+        URL.revokeObjectURL(url);
+      }
+      img.src = url;
+    }
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const toggleLabel = document.getElementById('toggleLabel');
+    themeToggle.addEventListener('change', (e)=>{
+      if(e.target.checked){
+        document.body.classList.add('night');
+        toggleLabel.textContent = 'Night';
+        render('night');
+      } else {
+        document.body.classList.remove('night');
+        toggleLabel.textContent = 'Day';
+        render('day');
+      }
+    });
+
+    // Download all (basic implementation: download each PNG sequentially)
+    document.getElementById('downloadAll').addEventListener('click', async ()=>{
+      const currentTheme = document.body.classList.contains('night') ? 'night' : 'day';
+      for(const s of stickers){
+        // small delay to allow browser to process downloads
+        await new Promise(r=> setTimeout(r, 250));
+        downloadStickerAsPNG(s.id, s.icon(palette[currentTheme]));
+      }
+    });
+
+    // Initial render
+    render('day');
+
+  </script>
+</body>
+</html>
